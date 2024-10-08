@@ -69,11 +69,12 @@ pub struct TransferFeeConfig {
 impl TransferFeeConfig {
     /// Get the fee for the given epoch
     pub fn get_epoch_fee(&self, epoch: Epoch) -> &TransferFee {
-        if epoch >= self.newer_transfer_fee.epoch.into() {
-            &self.newer_transfer_fee
-        } else {
-            &self.older_transfer_fee
-        }
+        //if epoch >= self.newer_transfer_fee.epoch.into() {
+        //    &self.newer_transfer_fee
+        //} else {
+        //    &self.older_transfer_fee
+        //}
+        unimplemented!()
     }
     /// Calculate the fee for the given epoch
     pub fn calculate_epoch_fee(&self, epoch: Epoch, amount: u64) -> Option<u64> {

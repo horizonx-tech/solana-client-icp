@@ -29,9 +29,9 @@ num_enum = "0.5"
 serde = "1"
 serde_derive = "1"
 serde_json = "1"
-solana-frozen-abi = "~1.18"
-solana-frozen-abi-macro = "~1.18"
-solana-sdk = "~1.18"
+solana-frozen-abi = { git = "https://github.com/hide-yoshi/solana-sdk-icp"}
+solana-frozen-abi-macro = { git = "https://github.com/hide-yoshi/solana-sdk-icp"}
+solana-sdk = { git = "https://github.com/hide-yoshi/solana-sdk-icp"}
 thiserror = "1"
 
 [build-dependencies]

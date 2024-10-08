@@ -1177,42 +1177,43 @@ pub fn authorize<S: std::hash::BuildHasher>(
     clock: &Clock,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    let mut vote_state: VoteState = vote_account
-        .get_state::<VoteStateVersions>()?
-        .convert_to_current();
-
-    match vote_authorize {
-        VoteAuthorize::Voter => {
-            let authorized_withdrawer_signer = if feature_set
-                .is_active(&feature_set::vote_withdraw_authority_may_change_authorized_voter::id())
-            {
-                verify_authorized_signer(&vote_state.authorized_withdrawer, signers).is_ok()
-            } else {
-                false
-            };
-
-            vote_state.set_new_authorized_voter(
-                authorized,
-                clock.epoch,
-                clock.leader_schedule_epoch + 1,
-                |epoch_authorized_voter| {
-                    // current authorized withdrawer or authorized voter must say "yay"
-                    if authorized_withdrawer_signer {
-                        Ok(())
-                    } else {
-                        verify_authorized_signer(&epoch_authorized_voter, signers)
-                    }
-                },
-            )?;
-        }
-        VoteAuthorize::Withdrawer => {
-            // current authorized withdrawer must say "yay"
-            verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
-            vote_state.authorized_withdrawer = *authorized;
-        }
-    }
-
-    vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    //let mut vote_state: VoteState = vote_account
+    //    .get_state::<VoteStateVersions>()?
+    //    .convert_to_current();
+//
+    //match vote_authorize {
+    //    VoteAuthorize::Voter => {
+    //        let authorized_withdrawer_signer = if feature_set
+    //            .is_active(&feature_set::vote_withdraw_authority_may_change_authorized_voter::id())
+    //        {
+    //            verify_authorized_signer(&vote_state.authorized_withdrawer, signers).is_ok()
+    //        } else {
+    //            false
+    //        };
+//
+    //        vote_state.set_new_authorized_voter(
+    //            authorized,
+    //            clock.epoch,
+    //            clock.leader_schedule_epoch + 1,
+    //            |epoch_authorized_voter| {
+    //                // current authorized withdrawer or authorized voter must say "yay"
+    //                if authorized_withdrawer_signer {
+    //                    Ok(())
+    //                } else {
+    //                    verify_authorized_signer(&epoch_authorized_voter, signers)
+    //                }
+    //            },
+    //        )?;
+    //    }
+    //    VoteAuthorize::Withdrawer => {
+    //        // current authorized withdrawer must say "yay"
+    //        verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
+    //        vote_state.authorized_withdrawer = *authorized;
+    //    }
+    //}
+//
+    //vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    unimplemented!()
 }
 
 /// Update the node_pubkey, requires signature of the authorized voter
@@ -1222,19 +1223,20 @@ pub fn update_validator_identity<S: std::hash::BuildHasher>(
     signers: &HashSet<Pubkey, S>,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    let mut vote_state: VoteState = vote_account
-        .get_state::<VoteStateVersions>()?
-        .convert_to_current();
-
-    // current authorized withdrawer must say "yay"
-    verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
-
-    // new node must say "yay"
-    verify_authorized_signer(node_pubkey, signers)?;
-
-    vote_state.node_pubkey = *node_pubkey;
-
-    vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    //let mut vote_state: VoteState = vote_account
+    //    .get_state::<VoteStateVersions>()?
+    //    .convert_to_current();
+//
+    //// current authorized withdrawer must say "yay"
+    //verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
+//
+    //// new node must say "yay"
+    //verify_authorized_signer(node_pubkey, signers)?;
+//
+    //vote_state.node_pubkey = *node_pubkey;
+//
+    //vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    unimplemented!()
 }
 
 /// Update the vote account's commission
@@ -1244,16 +1246,18 @@ pub fn update_commission<S: std::hash::BuildHasher>(
     signers: &HashSet<Pubkey, S>,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    let mut vote_state: VoteState = vote_account
-        .get_state::<VoteStateVersions>()?
-        .convert_to_current();
+    //let mut vote_state: VoteState = vote_account
+    //    .get_state::<VoteStateVersions>()?
+    //    .convert_to_current();
+//
+    //// current authorized withdrawer must say "yay"
+    //verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
+//
+    //vote_state.commission = commission;
+//
+    //vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    unimplemented!()
 
-    // current authorized withdrawer must say "yay"
-    verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
-
-    vote_state.commission = commission;
-
-    vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
 }
 
 fn verify_authorized_signer<S: std::hash::BuildHasher>(
@@ -1280,61 +1284,62 @@ pub fn withdraw<S: std::hash::BuildHasher>(
     clock: Option<&Clock>,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    // NOTE: solana-sdk 1.11 `try_borrow_account` is private(this lib was written in 1.10.29)
-    // We use `try_borrow_instruction_account` to fix it.
-    let mut vote_account = instruction_context
-        .try_borrow_instruction_account(transaction_context, vote_account_index)?;
-    let vote_state: VoteState = vote_account
-        .get_state::<VoteStateVersions>()?
-        .convert_to_current();
-
-    verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
-
-    let remaining_balance = vote_account
-        .get_lamports()
-        .checked_sub(lamports)
-        .ok_or(InstructionError::InsufficientFunds)?;
-
-    if remaining_balance == 0 {
-        let reject_active_vote_account_close = clock
-            .zip(vote_state.epoch_credits.last())
-            .map(|(clock, (last_epoch_with_credits, _, _))| {
-                let current_epoch = clock.epoch;
-                // if current_epoch - last_epoch_with_credits < 2 then the validator has received credits
-                // either in the current epoch or the previous epoch. If it's >= 2 then it has been at least
-                // one full epoch since the validator has received credits.
-                current_epoch.saturating_sub(*last_epoch_with_credits) < 2
-            })
-            .unwrap_or(false);
-
-        if reject_active_vote_account_close {
-            // TODO:
-            // datapoint_debug!("vote-account-close", ("reject-active", 1, i64));
-            return Err(InstructionError::InvalidAccountData);
-        } else {
-            // Deinitialize upon zero-balance
-            // TODO:
-            // datapoint_debug!("vote-account-close", ("allow", 1, i64));
-            vote_account.set_state(
-                &VoteStateVersions::new_current(VoteState::default()),
-                feature_set,
-            )?;
-        }
-    } else if let Some(rent_sysvar) = rent_sysvar {
-        let min_rent_exempt_balance = rent_sysvar.minimum_balance(vote_account.get_data().len());
-        if remaining_balance < min_rent_exempt_balance {
-            return Err(InstructionError::InsufficientFunds);
-        }
-    }
-
-    vote_account.checked_sub_lamports(lamports, feature_set)?;
-    drop(vote_account);
-    // NOTE: solana-sdk 1.11 `try_borrow_account` is private(this lib was written in 1.10.29)
-    // We use `try_borrow_instruction_account` to fix it.
-    let mut to_account = instruction_context
-        .try_borrow_instruction_account(transaction_context, to_account_index)?;
-    to_account.checked_add_lamports(lamports, feature_set)?;
-    Ok(())
+    //// NOTE: solana-sdk 1.11 `try_borrow_account` is private(this lib was written in 1.10.29)
+    //// We use `try_borrow_instruction_account` to fix it.
+    //let mut vote_account = instruction_context
+    //    .try_borrow_instruction_account(transaction_context, vote_account_index)?;
+    //let vote_state: VoteState = vote_account
+    //    .get_state::<VoteStateVersions>()?
+    //    .convert_to_current();
+//
+    //verify_authorized_signer(&vote_state.authorized_withdrawer, signers)?;
+//
+    //let remaining_balance = vote_account
+    //    .get_lamports()
+    //    .checked_sub(lamports)
+    //    .ok_or(InstructionError::InsufficientFunds)?;
+//
+    //if remaining_balance == 0 {
+    //    let reject_active_vote_account_close = clock
+    //        .zip(vote_state.epoch_credits.last())
+    //        .map(|(clock, (last_epoch_with_credits, _, _))| {
+    //            let current_epoch = clock.epoch;
+    //            // if current_epoch - last_epoch_with_credits < 2 then the validator has received credits
+    //            // either in the current epoch or the previous epoch. If it's >= 2 then it has been at least
+    //            // one full epoch since the validator has received credits.
+    //            current_epoch.saturating_sub(*last_epoch_with_credits) < 2
+    //        })
+    //        .unwrap_or(false);
+//
+    //    if reject_active_vote_account_close {
+    //        // TODO:
+    //        // datapoint_debug!("vote-account-close", ("reject-active", 1, i64));
+    //        return Err(InstructionError::InvalidAccountData);
+    //    } else {
+    //        // Deinitialize upon zero-balance
+    //        // TODO:
+    //        // datapoint_debug!("vote-account-close", ("allow", 1, i64));
+    //        vote_account.set_state(
+    //            &VoteStateVersions::new_current(VoteState::default()),
+    //            feature_set,
+    //        )?;
+    //    }
+    //} else if let Some(rent_sysvar) = rent_sysvar {
+    //    let min_rent_exempt_balance = rent_sysvar.minimum_balance(vote_account.get_data().len());
+    //    if remaining_balance < min_rent_exempt_balance {
+    //        return Err(InstructionError::InsufficientFunds);
+    //    }
+    //}
+//
+    //vote_account.checked_sub_lamports(lamports, feature_set)?;
+    //drop(vote_account);
+    //// NOTE: solana-sdk 1.11 `try_borrow_account` is private(this lib was written in 1.10.29)
+    //// We use `try_borrow_instruction_account` to fix it.
+    //let mut to_account = instruction_context
+    //    .try_borrow_instruction_account(transaction_context, to_account_index)?;
+    //to_account.checked_add_lamports(lamports, feature_set)?;
+    //Ok(())
+    unimplemented!()
 }
 
 /// Initialize the vote_state for a vote account
@@ -1347,22 +1352,23 @@ pub fn initialize_account<S: std::hash::BuildHasher>(
     clock: &Clock,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    if vote_account.get_data().len() != VoteState::size_of() {
-        return Err(InstructionError::InvalidAccountData);
-    }
-    let versioned = vote_account.get_state::<VoteStateVersions>()?;
-
-    if !versioned.is_uninitialized() {
-        return Err(InstructionError::AccountAlreadyInitialized);
-    }
-
-    // node must agree to accept this vote account
-    verify_authorized_signer(&vote_init.node_pubkey, signers)?;
-
-    vote_account.set_state(
-        &VoteStateVersions::new_current(VoteState::new(vote_init, clock)),
-        feature_set,
-    )
+    //if vote_account.get_data().len() != VoteState::size_of() {
+    //    return Err(InstructionError::InvalidAccountData);
+    //}
+    //let versioned = vote_account.get_state::<VoteStateVersions>()?;
+//
+    //if !versioned.is_uninitialized() {
+    //    return Err(InstructionError::AccountAlreadyInitialized);
+    //}
+//
+    //// node must agree to accept this vote account
+    //verify_authorized_signer(&vote_init.node_pubkey, signers)?;
+//
+    //vote_account.set_state(
+    //    &VoteStateVersions::new_current(VoteState::new(vote_init, clock)),
+    //    feature_set,
+    //)
+    unimplemented!()
 }
 
 fn verify_and_get_vote_state<S: std::hash::BuildHasher>(
@@ -1391,17 +1397,18 @@ pub fn process_vote<S: std::hash::BuildHasher>(
     signers: &HashSet<Pubkey, S>,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    let mut vote_state = verify_and_get_vote_state(vote_account, clock, signers)?;
-
-    vote_state.process_vote(vote, slot_hashes, clock.epoch, Some(feature_set))?;
-    if let Some(timestamp) = vote.timestamp {
-        vote.slots
-            .iter()
-            .max()
-            .ok_or(VoteError::EmptySlots)
-            .and_then(|slot| vote_state.process_timestamp(*slot, timestamp))?;
-    }
-    vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    //let mut vote_state = verify_and_get_vote_state(vote_account, clock, signers)?;
+//
+    //vote_state.process_vote(vote, slot_hashes, clock.epoch, Some(feature_set))?;
+    //if let Some(timestamp) = vote.timestamp {
+    //    vote.slots
+    //        .iter()
+    //        .max()
+    //        .ok_or(VoteError::EmptySlots)
+    //        .and_then(|slot| vote_state.process_timestamp(*slot, timestamp))?;
+    //}
+    //vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    unimplemented!()
 }
 
 pub fn process_vote_state_update<S: std::hash::BuildHasher>(
@@ -1412,16 +1419,17 @@ pub fn process_vote_state_update<S: std::hash::BuildHasher>(
     signers: &HashSet<Pubkey, S>,
     feature_set: &FeatureSet,
 ) -> Result<(), InstructionError> {
-    let mut vote_state = verify_and_get_vote_state(vote_account, clock, signers)?;
-    vote_state.check_update_vote_state_slots_are_valid(&mut vote_state_update, slot_hashes)?;
-    vote_state.process_new_vote_state(
-        vote_state_update.lockouts,
-        vote_state_update.root,
-        vote_state_update.timestamp,
-        clock.epoch,
-        Some(feature_set),
-    )?;
-    vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    //let mut vote_state = verify_and_get_vote_state(vote_account, clock, signers)?;
+    //vote_state.check_update_vote_state_slots_are_valid(&mut vote_state_update, slot_hashes)?;
+    //vote_state.process_new_vote_state(
+    //    vote_state_update.lockouts,
+    //    vote_state_update.root,
+    //    vote_state_update.timestamp,
+    //    clock.epoch,
+    //    Some(feature_set),
+    //)?;
+    //vote_account.set_state(&VoteStateVersions::new_current(vote_state), feature_set)
+    unimplemented!()
 }
 
 pub fn create_account_with_authorized(
