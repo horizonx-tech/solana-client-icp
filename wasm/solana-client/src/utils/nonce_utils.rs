@@ -1,7 +1,7 @@
 //! Durable transaction nonce helpers.
 
 use {
-    crate::{utils::rpc_config::RpcAccountInfoConfig, WasmClient},
+    crate::{provider::CallOptions, utils::rpc_config::RpcAccountInfoConfig, WasmClient},
     solana_sdk::{
         account::{Account, ReadableAccount},
         account_utils::StateMut,
@@ -43,8 +43,9 @@ pub enum NonceError {
 pub async fn get_account(
     rpc_client: &WasmClient,
     nonce_pubkey: &Pubkey,
+    opts: CallOptions,
 ) -> Result<Account, NonceError> {
-    get_account_with_commitment(rpc_client, nonce_pubkey, CommitmentConfig::default()).await
+    get_account_with_commitment(rpc_client, nonce_pubkey, CommitmentConfig::default(), opts).await
 }
 
 /// Get a nonce account from the network.
@@ -58,6 +59,7 @@ pub async fn get_account_with_commitment(
     rpc_client: &WasmClient,
     nonce_pubkey: &Pubkey,
     commitment_config: CommitmentConfig,
+    opts: CallOptions,
 ) -> Result<Account, NonceError> {
     rpc_client
         .get_account_with_config(
@@ -66,6 +68,7 @@ pub async fn get_account_with_commitment(
                 commitment: Some(commitment_config),
                 ..Default::default()
             },
+            opts,
         )
         .await
         .map_err(|e| NonceError::Client(format!("{}", e)))

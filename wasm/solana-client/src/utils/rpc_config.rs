@@ -13,7 +13,7 @@ use solana_sdk::{
 };
 
 use super::rpc_filter::RpcFilterType;
-use crate::{utils::nonce_utils, ClientError, ClientResult, WasmClient};
+use crate::{provider::CallOptions, utils::nonce_utils, ClientError, ClientResult, WasmClient};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -33,20 +33,25 @@ impl Source {
         &self,
         rpc_client: &WasmClient,
         commitment_config: CommitmentConfig,
+        opts: CallOptions,
     ) -> Result<Hash, Box<dyn std::error::Error>> {
         match self {
             Self::Cluster => {
                 let (blockhash, _) = rpc_client
-                    .get_latest_blockhash_with_config(commitment_config)
+                    .get_latest_blockhash_with_config(commitment_config, opts)
                     .await?;
                 Ok(blockhash)
             }
             Self::NonceAccount(ref pubkey) => {
                 #[allow(clippy::redundant_closure)]
-                let data =
-                    nonce_utils::get_account_with_commitment(rpc_client, pubkey, commitment_config)
-                        .await
-                        .and_then(|ref a| nonce_utils::data_from_account(a))?;
+                let data = nonce_utils::get_account_with_commitment(
+                    rpc_client,
+                    pubkey,
+                    commitment_config,
+                    opts,
+                )
+                .await
+                .and_then(|ref a| nonce_utils::data_from_account(a))?;
                 Ok(data.blockhash())
             }
         }
@@ -57,19 +62,24 @@ impl Source {
         rpc_client: &WasmClient,
         blockhash: &Hash,
         commitment_config: CommitmentConfig,
+        opts: CallOptions,
     ) -> Result<bool, Box<dyn std::error::Error>> {
         Ok(match self {
             Self::Cluster => {
                 rpc_client
-                    .is_blockhash_valid(blockhash, commitment_config)
+                    .is_blockhash_valid(blockhash, commitment_config, opts)
                     .await?
             }
             Self::NonceAccount(ref pubkey) => {
                 #[allow(clippy::redundant_closure)]
-                let _ =
-                    nonce_utils::get_account_with_commitment(rpc_client, pubkey, commitment_config)
-                        .await
-                        .and_then(|ref a| nonce_utils::data_from_account(a))?;
+                let _ = nonce_utils::get_account_with_commitment(
+                    rpc_client,
+                    pubkey,
+                    commitment_config,
+                    opts,
+                )
+                .await
+                .and_then(|ref a| nonce_utils::data_from_account(a))?;
                 true
             }
         })
@@ -100,12 +110,13 @@ impl BlockhashQuery {
         &self,
         rpc_client: &WasmClient,
         commitment_config: CommitmentConfig,
+        opts: CallOptions,
     ) -> Result<Hash, Box<dyn std::error::Error>> {
         match self {
             BlockhashQuery::None(hash) => Ok(*hash),
             BlockhashQuery::FeeCalculator(source, hash) => {
                 if !source
-                    .is_blockhash_valid(rpc_client, hash, commitment_config)
+                    .is_blockhash_valid(rpc_client, hash, commitment_config, opts)
                     .await?
                 {
                     return Err(format!("Hash has expired {:?}", hash).into());
@@ -113,7 +124,9 @@ impl BlockhashQuery {
                 Ok(*hash)
             }
             BlockhashQuery::All(source) => {
-                source.get_blockhash(rpc_client, commitment_config).await
+                source
+                    .get_blockhash(rpc_client, commitment_config, opts)
+                    .await
             }
         }
     }
