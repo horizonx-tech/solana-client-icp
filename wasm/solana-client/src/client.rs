@@ -9,7 +9,6 @@ use solana_extra_wasm::{
         EncodedConfirmedTransactionWithStatusMeta, TransactionConfirmationStatus, UiConfirmedBlock,
         UiTransactionEncoding,
     },
-    utils::sleep,
 };
 use solana_sdk::{
     account::Account,
@@ -25,7 +24,7 @@ use solana_sdk::{
 };
 
 use crate::{
-    constants::{MAX_RETRIES, SLEEP_MS},
+    constants::MAX_RETRIES,
     methods::*,
     provider::Provider,
     utils::{
@@ -85,7 +84,8 @@ impl WasmClient {
 
     async fn send<T: Method, R: DeserializeOwned>(&self, request: T) -> ClientResult<R> {
         let Provider::Http(provider) = &self.provider;
-        provider.send(&request).await?.result
+        let r = provider.send(&request).await?;
+        Ok(r.result)
     }
 
     pub async fn get_balance_with_commitment(
@@ -95,7 +95,6 @@ impl WasmClient {
     ) -> ClientResult<u64> {
         let request = GetBalanceRequest::new_with_config(*pubkey, commitment_config);
         let response: GetBalanceResponse = self.send(request).await?;
-
         Ok(response.value)
     }
 
@@ -310,7 +309,7 @@ impl WasmClient {
                 }
             }
 
-            sleep(SLEEP_MS).await;
+            //            sleep(SLEEP_MS).await;
         }
 
         Ok(is_success)

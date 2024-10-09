@@ -1,8 +1,6 @@
 [workspace]
 members = [
-    "seahorse-compile",
     "solana-client",
     "utils/*",
 ]
-exclude = ["playnet", "rust-analyzer"]
 resolver = "2"

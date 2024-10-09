@@ -35,18 +35,6 @@ impl Default for ClientError {
     }
 }
 
-impl From<gloo_net::Error> for ClientError {
-    fn from(error: gloo_net::Error) -> Self {
-        ClientError {
-            error: Error {
-                code: StatusCode::INTERNAL_SERVER_ERROR.into(),
-                message: error.to_string(),
-            },
-            ..Default::default()
-        }
-    }
-}
-
 impl ClientError {
     pub fn new(error_msg: impl ToString) -> Self {
         ClientError {

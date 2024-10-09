@@ -21,7 +21,7 @@ bincode = "1"
 borsh = "0.10"
 bs58 = "0.4"
 bytemuck = "1"
-fluvio-wasm-timer = "0.2"
+#fluvio-wasm-timer = "0.2"
 log = "0.4.17" # only for nightly builds
 num-derive = "0.3"
 num-traits = "0.2"
@@ -29,10 +29,12 @@ num_enum = "0.5"
 serde = "1"
 serde_derive = "1"
 serde_json = "1"
-solana-frozen-abi = { git = "https://github.com/hide-yoshi/solana-sdk-icp"}
-solana-frozen-abi-macro = { git = "https://github.com/hide-yoshi/solana-sdk-icp"}
-solana-sdk = { git = "https://github.com/hide-yoshi/solana-sdk-icp"}
+solana-frozen-abi =  { path = "../../../../solana-sdk-icp/frozen-abi" }
+solana-frozen-abi-macro = { path = "../../../../solana-sdk-icp/frozen-abi/macro" }
+solana-sdk = { path = "../../../../solana-sdk-icp/sdk" }
 thiserror = "1"
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.2", features = ["custom"] }
 
 [build-dependencies]
 rustc_version = "0.4"

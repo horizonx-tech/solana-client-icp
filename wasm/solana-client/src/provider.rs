@@ -1,11 +1,8 @@
-use std::pin::pin;
-
-use futures::future::{select, Either};
-use gloo_net::http::{Method as HttpMethod, RequestBuilder};
-use gloo_timers::future::TimeoutFuture;
 use http::StatusCode;
+use ic_cdk::api::management_canister::http_request::{
+    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod,
+};
 use serde::de::DeserializeOwned;
-use web_sys::{wasm_bindgen::UnwrapThrowExt, AbortController};
 
 use crate::{methods::Method, ClientError, ClientRequest, ClientResponse, ClientResult};
 
@@ -37,39 +34,25 @@ impl HttpProvider {
         request: &T,
     ) -> ClientResult<ClientResponse<R>> {
         let client_request = ClientRequest::new(T::NAME).id(0).params(request);
-
-        let ctrl = AbortController::new().unwrap_throw();
-        let timeout_fut = TimeoutFuture::new(self.timeout);
-        let req_fut = RequestBuilder::new(&self.url)
-            .method(HttpMethod::POST)
-            .abort_signal(Some(&ctrl.signal()))
-            .json(&client_request)?
-            .send();
-
-        let fut = match select(timeout_fut, pin!(req_fut)).await {
-            Either::Left((_, fut)) => {
-                ctrl.abort();
-                fut.await
-            }
-            Either::Right((val, fut)) => {
-                drop(fut);
-                val
-            }
+        let args: CanisterHttpRequestArgument = CanisterHttpRequestArgument {
+            body: Some(serde_json::to_vec(&client_request).map_err(|e| ClientError::new(e))?),
+            url: self.url.clone(),
+            headers: vec![HttpHeader {
+                name: "Content-Type".to_string(),
+                value: "application/json".to_string(),
+            }],
+            max_response_bytes: None,
+            method: HttpMethod::POST,
+            transform: None, //TODO
         };
-
-        let response = fut?;
-        let status =
-            StatusCode::from_u16(response.status()).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
-
-        if status.is_success() {
-            if let Ok(response) = response.json::<ClientResponse<R>>().await {
-                return Ok(response);
+        let cycles = 1_603_135_200; //TODO
+        match http_request(args, cycles).await {
+            Ok(response) => {
+                let response =
+                    serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
+                Ok(response)
             }
-        }
-
-        match response.json::<ClientError>().await {
-            Ok(error) => Err(error),
-            Err(error) => Err(ClientError::new_with_status(status.as_u16(), error)),
+            Err(e) => Err(ClientError::new(e.1)),
         }
     }
 }
