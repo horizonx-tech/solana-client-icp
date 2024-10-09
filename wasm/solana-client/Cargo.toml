@@ -27,6 +27,7 @@ solana-extra-wasm = { path = "../utils/solana-extra" }
 solana-sdk = { path = "../../../solana-sdk-icp/sdk" }
 thiserror = "1"
 ic-cdk = "0.16"
+candid = "0.10.10"
 
 [dev-dependencies]
 #wasm-bindgen-test = "0.3.38"

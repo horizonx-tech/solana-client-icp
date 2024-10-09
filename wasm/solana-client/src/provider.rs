@@ -1,3 +1,4 @@
+use candid::Nat;
 use http::StatusCode;
 use ic_cdk::api::management_canister::http_request::{
     http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod,
@@ -45,12 +46,25 @@ impl HttpProvider {
             method: HttpMethod::POST,
             transform: None, //TODO
         };
-        let cycles = 1_603_135_200; //TODO
+        let cycles = 2_603_253_600; //TODO
         match http_request(args, cycles).await {
             Ok(response) => {
-                let response =
-                    serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
-                Ok(response)
+                let status = response.0.status;
+                if status.eq(&200_u8) {
+                    let val: serde_json::Value =
+                        serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
+                    ic_cdk::println!("response: {:?}", val);
+                    let response =
+                        serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
+                    return Ok(response);
+                } else {
+                    let body: serde_json::Value =
+                        serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
+                    Err(ClientError::new(format!(
+                        "HTTP error: {}",
+                        body.to_string()
+                    )))
+                }
             }
             Err(e) => Err(ClientError::new(e.1)),
         }

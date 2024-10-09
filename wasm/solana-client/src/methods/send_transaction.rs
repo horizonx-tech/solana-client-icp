@@ -65,11 +65,16 @@ impl Serialize for SendTransactionRequest {
 
 #[serde_as]
 #[derive(Debug, Deserialize)]
-pub struct SendTransactionResponse(#[serde_as(as = "DisplayFromStr")] Signature);
+pub struct SendTransactionResponse {
+    jsonrpc: String,
+    #[serde_as(as = "DisplayFromStr")]
+    result: Signature,
+    id: String,
+}
 
 impl From<SendTransactionResponse> for Signature {
     fn from(val: SendTransactionResponse) -> Self {
-        val.0
+        val.result
     }
 }
 
@@ -104,6 +109,6 @@ mod tests {
 
         assert_eq!(response.id, 1);
         assert_eq!(response.jsonrpc, "2.0");
-        assert_eq!(response.result.0, Signature::from_str("2id3YC2jK9G5Wo2phDx4gJVAew8DcY5NAojnVuao8rkxwPYPe8cSwE5GzhEgJA2y8fVjDEo6iR6ykBvDxrTQrtpb").unwrap());
+        assert_eq!(response.result.result, Signature::from_str("2id3YC2jK9G5Wo2phDx4gJVAew8DcY5NAojnVuao8rkxwPYPe8cSwE5GzhEgJA2y8fVjDEo6iR6ykBvDxrTQrtpb").unwrap());
     }
 }
