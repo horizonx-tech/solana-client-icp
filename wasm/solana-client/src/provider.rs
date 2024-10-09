@@ -51,9 +51,6 @@ impl HttpProvider {
             Ok(response) => {
                 let status = response.0.status;
                 if status.eq(&200_u8) {
-                    let val: serde_json::Value =
-                        serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
-                    ic_cdk::println!("response: {:?}", val);
                     let response =
                         serde_json::from_slice(&response.0.body).map_err(ClientError::new)?;
                     return Ok(response);
