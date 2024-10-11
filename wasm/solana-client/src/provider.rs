@@ -7,8 +7,8 @@ use crate::{methods::Method, ClientError, ClientRequest, ClientResponse, ClientR
 
 #[derive(Clone)]
 pub struct CallOptions {
-    max_response_bytes: Option<u64>,
-    transform: Option<TransformContext>,
+    pub max_response_bytes: Option<u64>,
+    pub transform: Option<TransformContext>,
 }
 
 impl Default for CallOptions {

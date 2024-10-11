@@ -1830,6 +1830,7 @@ dependencies = [
  "base64 0.13.1",
  "bincode",
  "bs58",
+ "candid",
  "futures",
  "http",
  "ic-cdk",

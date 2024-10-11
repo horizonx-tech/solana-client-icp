@@ -24,4 +24,6 @@ pub use {
     client::WasmClient, error::ClientError, request::ClientRequest, response::ClientResponse,
 };
 
+pub use provider::CallOptions;
+
 pub type ClientResult<T> = std::result::Result<T, error::ClientError>;
