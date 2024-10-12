@@ -1,1 +1,0 @@
-export { seahorse } from "./seahorse";

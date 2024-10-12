@@ -1,8 +1,0 @@
-# Ignore artifacts:
-build
-# Skip build folders inside src, e.g. src/commands/build
-!src/**/build
-public
-
-# Declaration files:
-*.d.ts

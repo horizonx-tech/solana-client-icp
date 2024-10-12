@@ -1,1 +1,0 @@
-export { anchor } from "./anchor";
