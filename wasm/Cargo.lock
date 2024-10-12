@@ -1873,7 +1873,9 @@ dependencies = [
 [[package]]
 name = "solana-frozen-abi"
 version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
 dependencies = [
+ "bitflags",
  "block-buffer",
  "bs58",
  "bv",
@@ -1888,6 +1890,7 @@ dependencies = [
  "serde_derive",
  "sha2",
  "solana-frozen-abi-macro",
+ "solana-logger",
  "subtle",
  "thiserror",
 ]
@@ -1895,6 +1898,7 @@ dependencies = [
 [[package]]
 name = "solana-frozen-abi-macro"
 version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1923,6 +1927,7 @@ dependencies = [
 [[package]]
 name = "solana-program"
 version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
 dependencies = [
  "ark-bn254",
  "ark-ec",
@@ -1969,6 +1974,7 @@ dependencies = [
 [[package]]
 name = "solana-sdk"
 version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
 dependencies = [
  "anyhow",
  "assert_matches",
