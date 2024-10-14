@@ -27,7 +27,7 @@ solana-extra-wasm = { path = "../utils/solana-extra" }
 solana-sdk = { git = "https://github.com/hide-yoshi/solana-sdk-icp", branch = "main" }
 solana-program = { git = "https://github.com/hide-yoshi/solana-sdk-icp", branch = "main" }
 thiserror = "1"
-ic-cdk = "0.16"
-candid = "0.10.10"
+ic-cdk = "0.13.2"
+candid = "^0.10.4"
 
 
