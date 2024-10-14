@@ -1840,8 +1840,8 @@ dependencies = [
  "serde_tuple",
  "serde_with 3.11.0",
  "solana-extra-wasm",
- "solana-program",
- "solana-sdk",
+ "solana-program 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
+ "solana-sdk 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
  "thiserror",
 ]
 
@@ -1865,9 +1865,34 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "solana-frozen-abi",
- "solana-frozen-abi-macro",
- "solana-sdk",
+ "solana-frozen-abi 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
+ "solana-sdk 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
+ "thiserror",
+]
+
+[[package]]
+name = "solana-frozen-abi"
+version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
+dependencies = [
+ "bitflags",
+ "block-buffer",
+ "bs58",
+ "bv",
+ "either",
+ "generic-array",
+ "lazy_static",
+ "log",
+ "memmap2",
+ "rustc_version",
+ "serde",
+ "serde_bytes",
+ "serde_derive",
+ "sha2",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
+ "solana-logger",
+ "subtle",
  "thiserror",
 ]
 
@@ -1890,10 +1915,21 @@ dependencies = [
  "serde_bytes",
  "serde_derive",
  "sha2",
- "solana-frozen-abi-macro",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
  "solana-logger",
  "subtle",
  "thiserror",
+]
+
+[[package]]
+name = "solana-frozen-abi-macro"
+version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "rustc_version",
+ "syn 2.0.79",
 ]
 
 [[package]]
@@ -1923,6 +1959,53 @@ name = "solana-playground-utils-wasm"
 version = "0.1.0"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "solana-program"
+version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
+dependencies = [
+ "ark-bn254",
+ "ark-ec",
+ "ark-ff",
+ "ark-serialize",
+ "base64 0.21.7",
+ "bincode",
+ "bitflags",
+ "blake3",
+ "borsh 0.10.4",
+ "borsh 0.9.3",
+ "borsh 1.5.1",
+ "bs58",
+ "bv",
+ "bytemuck",
+ "cc",
+ "curve25519-dalek",
+ "getrandom",
+ "itertools",
+ "lazy_static",
+ "libc",
+ "light-poseidon",
+ "log",
+ "memoffset",
+ "num-bigint",
+ "num-derive 0.4.2",
+ "num-traits",
+ "parking_lot",
+ "rustc_version",
+ "rustversion",
+ "serde",
+ "serde_bytes",
+ "serde_derive",
+ "serde_json",
+ "sha2",
+ "sha3",
+ "solana-frozen-abi 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
+ "solana-sdk-macro",
+ "thiserror",
+ "zeroize",
 ]
 
 [[package]]
@@ -1965,11 +2048,65 @@ dependencies = [
  "serde_json",
  "sha2",
  "sha3",
- "solana-frozen-abi",
- "solana-frozen-abi-macro",
+ "solana-frozen-abi 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
  "solana-sdk-macro",
  "thiserror",
  "zeroize",
+]
+
+[[package]]
+name = "solana-sdk"
+version = "1.18.23"
+source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#a209c593acccc928ed5a2c4058f5ba5fd0ff1b38"
+dependencies = [
+ "anyhow",
+ "assert_matches",
+ "async-trait",
+ "base64 0.21.7",
+ "bincode",
+ "bitflags",
+ "borsh 1.5.1",
+ "bs58",
+ "bytemuck",
+ "byteorder",
+ "candid",
+ "chrono",
+ "derivation-path",
+ "digest",
+ "ed25519-dalek",
+ "ed25519-dalek-bip32",
+ "generic-array",
+ "hmac",
+ "ic-cdk",
+ "itertools",
+ "lazy_static",
+ "log",
+ "memmap2",
+ "num-derive 0.4.2",
+ "num-traits",
+ "num_enum 0.7.3",
+ "pbkdf2",
+ "qstring",
+ "qualifier_attr",
+ "rustc_version",
+ "rustversion",
+ "serde",
+ "serde_bytes",
+ "serde_derive",
+ "serde_json",
+ "serde_with 2.3.3",
+ "sha2",
+ "sha3",
+ "siphasher",
+ "solana-frozen-abi 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
+ "solana-logger",
+ "solana-program 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main)",
+ "solana-sdk-macro",
+ "thiserror",
+ "tokio",
+ "uriparse",
 ]
 
 [[package]]
@@ -2016,10 +2153,10 @@ dependencies = [
  "sha2",
  "sha3",
  "siphasher",
- "solana-frozen-abi",
- "solana-frozen-abi-macro",
+ "solana-frozen-abi 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
+ "solana-frozen-abi-macro 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
  "solana-logger",
- "solana-program",
+ "solana-program 1.18.23 (git+https://github.com/hide-yoshi/solana-sdk-icp)",
  "solana-sdk-macro",
  "thiserror",
  "tokio",
