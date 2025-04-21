@@ -1,0 +1,5 @@
+service : {
+    "balance" : () -> (nat);
+    "pubkey" : () -> (text);
+    "update_state" : () -> ();
+};

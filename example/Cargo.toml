@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "src/example_backend"
+]
+resolver = "2"
+[workspace.dependencies]
+solana-client-icp = { path = "../solana-client" }
