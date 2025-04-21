@@ -277,7 +277,6 @@ impl WasmClient {
     ) -> ClientResult<Signature> {
         let request = SendTransactionRequest::new_with_config(transaction.to_owned(), config);
         let response: SendTransactionResponse = self.send(request, opts).await?;
-
         let signature: Signature = response.into();
 
         // A mismatching RPC response signature indicates an issue with the RPC node, and
