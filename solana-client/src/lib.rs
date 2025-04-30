@@ -6,7 +6,7 @@ extern crate serde_derive;
 mod client;
 mod constants;
 mod error;
-mod methods;
+pub mod methods;
 mod provider;
 mod request;
 mod response;
