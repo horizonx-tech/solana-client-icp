@@ -82,7 +82,7 @@ impl WasmClient {
         self.commitment_config
     }
 
-    async fn send<T: Method, R: DeserializeOwned>(
+    pub async fn send<T: Method, R: DeserializeOwned>(
         &self,
         request: T,
         opts: CallOptions,

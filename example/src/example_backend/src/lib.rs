@@ -1,7 +1,6 @@
 use std::str::FromStr;
 
 use borsh::{to_vec, BorshSerialize};
-use ic_cdk::println;
 use solana_client_icp::{
     solana_sdk::{
         instruction::{AccountMeta, Instruction},
