@@ -1869,7 +1869,7 @@ dependencies = [
 [[package]]
 name = "solana-frozen-abi"
 version = "1.18.23"
-source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#4e6fe4df3fd5942011e96263dd2104159ed22c59"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#81e11e3d1c97d0fd7211f53f7b161a2d8080b70c"
 dependencies = [
  "bitflags",
  "block-buffer",
@@ -1894,7 +1894,7 @@ dependencies = [
 [[package]]
 name = "solana-frozen-abi-macro"
 version = "1.18.23"
-source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#4e6fe4df3fd5942011e96263dd2104159ed22c59"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#81e11e3d1c97d0fd7211f53f7b161a2d8080b70c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1923,7 +1923,7 @@ dependencies = [
 [[package]]
 name = "solana-program"
 version = "1.18.23"
-source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#4e6fe4df3fd5942011e96263dd2104159ed22c59"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#81e11e3d1c97d0fd7211f53f7b161a2d8080b70c"
 dependencies = [
  "ark-bn254",
  "ark-ec",
@@ -1969,7 +1969,7 @@ dependencies = [
 [[package]]
 name = "solana-sdk"
 version = "1.18.23"
-source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#4e6fe4df3fd5942011e96263dd2104159ed22c59"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#81e11e3d1c97d0fd7211f53f7b161a2d8080b70c"
 dependencies = [
  "anyhow",
  "assert_matches",
