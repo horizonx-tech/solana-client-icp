@@ -1949,7 +1949,7 @@ dependencies = [
 [[package]]
 name = "solana-frozen-abi"
 version = "1.18.23"
-source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#8603d341c4663f67d9821b9f18e71dbb6007aa6e"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#28997fe786158945837ec76baa1d1fd7858e053a"
 dependencies = [
  "bitflags",
  "block-buffer",
@@ -1974,7 +1974,7 @@ dependencies = [
 [[package]]
 name = "solana-frozen-abi-macro"
 version = "1.18.23"
-source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#8603d341c4663f67d9821b9f18e71dbb6007aa6e"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#28997fe786158945837ec76baa1d1fd7858e053a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1996,7 +1996,7 @@ dependencies = [
 [[package]]
 name = "solana-program"
 version = "1.18.23"
-source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#8603d341c4663f67d9821b9f18e71dbb6007aa6e"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#28997fe786158945837ec76baa1d1fd7858e053a"
 dependencies = [
  "ark-bn254",
  "ark-ec",
@@ -2014,7 +2014,6 @@ dependencies = [
  "bytemuck",
  "cc",
  "curve25519-dalek",
- "getrandom 0.2.15",
  "itertools",
  "lazy_static",
  "libc",
@@ -2043,7 +2042,7 @@ dependencies = [
 [[package]]
 name = "solana-sdk"
 version = "1.18.23"
-source = "git+https://github.com/hide-yoshi/solana-sdk-icp?branch=main#8603d341c4663f67d9821b9f18e71dbb6007aa6e"
+source = "git+https://github.com/horizonx-tech/solana-sdk-icp?branch=main#28997fe786158945837ec76baa1d1fd7858e053a"
 dependencies = [
  "anyhow",
  "assert_matches",

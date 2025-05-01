@@ -1,6 +1,6 @@
 [package]
 name = "solana-client-icp"
-version = "1.18.0" # mirror solana-sdk version
+version = "1.18.0"                                                    # mirror solana-sdk version
 description = "Solana non-blocking WASM RPC client."
 authors = ["Acheron <acheroncrypto@gmail.com>"]
 repository = "https://github.com/solana-playground/solana-playground"
@@ -24,10 +24,8 @@ serde_json = "1"
 serde_tuple = "0.5"
 serde_with = "3.9"
 solana-extra-wasm = { path = "../utils/solana-extra" }
-solana-sdk = { git = "https://github.com/hide-yoshi/solana-sdk-icp", branch = "main" }
-solana-program = { git = "https://github.com/hide-yoshi/solana-sdk-icp", branch = "main" }
+solana-sdk = { git = "https://github.com/horizonx-tech/solana-sdk-icp", branch = "main" }
+solana-program = { git = "https://github.com/horizonx-tech/solana-sdk-icp", branch = "main" }
 thiserror = "1"
 ic-cdk = "0.13.2"
 candid = "^0.10.4"
-
-
